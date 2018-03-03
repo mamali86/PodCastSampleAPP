@@ -9,6 +9,7 @@ target 'PodcastApp' do
 
   pod 'Alamofire', '~> 4.6'
   pod 'SDWebImage', '~> 4.0'
+  pod 'FeedKit', '~> 7.0'
 
   target 'PodcastAppTests' do
     
