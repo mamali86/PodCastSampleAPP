@@ -7,12 +7,17 @@
 //
 
 import UIKit
+import FeedKit
 
 struct PodcastEpisode {
     
     let title: String?
+    let pubDate: Date?
+    let description: String?
     
-    init(title: String) {
-        self.title = title
+    init(feedItem: RSSFeedItem) {
+        self.title = feedItem.title ?? ""
+        self.pubDate = feedItem.pubDate ?? Date()
+        self.description = feedItem.description ?? ""
     }
 }

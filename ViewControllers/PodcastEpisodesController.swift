@@ -11,8 +11,8 @@ import FeedKit
 
 class PodcastEpisodesController: UITableViewController {
     
-    let cellID = "cellid"
-    var podcastEpisodes = [PodcastEpisode(title: "Hello World"), PodcastEpisode(title: "See you Soon"), PodcastEpisode(title: "Morning")]
+    fileprivate let epiCellID = "epicellid"
+    var podcastEpisodes = [PodcastEpisode]()
     
     var podcast: Podcast? {
         
@@ -38,8 +38,8 @@ class PodcastEpisodesController: UITableViewController {
         switch result {
         case let .rss(feed):
             var podcastEpisodes = [PodcastEpisode]()
-            feed.items?.forEach({ (feeItem) in
-                let podcastEpisode = PodcastEpisode(title: feeItem.title ?? "")
+            feed.items?.forEach({ (feedItem) in
+                let podcastEpisode = PodcastEpisode(feedItem: feedItem)
                 podcastEpisodes.append(podcastEpisode)
             })
             self.podcastEpisodes = podcastEpisodes
@@ -72,7 +72,9 @@ class PodcastEpisodesController: UITableViewController {
     //MARK:- SetUp Work
     
     fileprivate func setUpWork() {
-    tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        
+        let nib = UINib(nibName: "EpisodeCell", bundle: nil)
+     tableView.register(nib, forCellReuseIdentifier: epiCellID)
     tableView.tableFooterView = UIView()
     }
 
@@ -85,11 +87,13 @@ class PodcastEpisodesController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: epiCellID, for: indexPath) as!EpisodeCell
         let podcastEpisodes = self.podcastEpisodes[indexPath.row]
-
-        cell.textLabel?.text = podcastEpisodes.title
+        cell.podcastEpisode = podcastEpisodes
         return cell
+    }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 134
     }
     
     
