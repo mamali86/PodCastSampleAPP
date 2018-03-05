@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import FeedKit
 
 class EpisodeCell: UITableViewCell {
 
-    @IBOutlet weak var episodeImageView: UIView!
+    @IBOutlet weak var episodeImageView: UIImageView!
     
     @IBOutlet weak var descriptionLabel: UILabel! {
     
@@ -34,13 +35,15 @@ class EpisodeCell: UITableViewCell {
         didSet{
             
             titleLabel.text = podcastEpisode?.title
-//            pubDateLabel.text = podcastEpisode?.pubDate?.description
             descriptionLabel.text = podcastEpisode?.description
             
-            
+            let url = URL(string: podcastEpisode.imageUrl?.toSecureHTTPS() ?? "") 
+            episodeImageView.sd_setImage(with: url, completed: nil)
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd MMM, yyyy"
             pubDateLabel.text = dateFormatter.string(from: (podcastEpisode?.pubDate!)!)
+            
+            
             
         }
     }

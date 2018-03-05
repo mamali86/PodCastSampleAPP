@@ -11,7 +11,7 @@ import FeedKit
 
 class PodcastEpisodesController: UITableViewController {
     
-    fileprivate let epiCellID = "epicellid"
+    fileprivate let epiCellID = "epvarllid"
     var podcastEpisodes = [PodcastEpisode]()
     
     var podcast: Podcast? {
@@ -38,8 +38,14 @@ class PodcastEpisodesController: UITableViewController {
         switch result {
         case let .rss(feed):
             var podcastEpisodes = [PodcastEpisode]()
+            let image_Url = feed.iTunes?.iTunesImage?.attributes?.href
+
             feed.items?.forEach({ (feedItem) in
-                let podcastEpisode = PodcastEpisode(feedItem: feedItem)
+                var podcastEpisode = PodcastEpisode(feedItem: feedItem)
+                
+                if podcastEpisode.imageUrl == nil {
+                    podcastEpisode.imageUrl = image_Url
+                }
                 podcastEpisodes.append(podcastEpisode)
             })
             self.podcastEpisodes = podcastEpisodes
