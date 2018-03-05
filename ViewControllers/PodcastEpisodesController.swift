@@ -27,43 +27,13 @@ class PodcastEpisodesController: UITableViewController {
         
         guard let podcastFeedURL = podcast?.feedUrl else {return}
         
-        let secureFeedURL = podcastFeedURL.contains("https") ? podcastFeedURL :
-            podcastFeedURL.replacingOccurrences(of: "http", with: "https")
-        
-        
-    guard let url = URL(string: secureFeedURL) else {return}
-    let parser = FeedParser(URL: url)
-    parser?.parseAsync(result: { (result) in
-    print("Successfully parse feed", result.isSuccess)
-        switch result {
-        case let .rss(feed):
-            var podcastEpisodes = [PodcastEpisode]()
-            let image_Url = feed.iTunes?.iTunesImage?.attributes?.href
+        ConfigApiManager.sharedInstance.fetchEpisoides(podcastFeedURL: podcastFeedURL) { (podcastEpisodes) in
 
-            feed.items?.forEach({ (feedItem) in
-                var podcastEpisode = PodcastEpisode(feedItem: feedItem)
-                
-                if podcastEpisode.imageUrl == nil {
-                    podcastEpisode.imageUrl = image_Url
-                }
-                podcastEpisodes.append(podcastEpisode)
-            })
-            self.podcastEpisodes = podcastEpisodes
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-            
-        break        // Really Simple Syndication Feed Model
-        case let .failure(error):
-            print("An error in call", error)
-        default:
-            print("found a Feed...")
+                        self.podcastEpisodes = podcastEpisodes
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
         }
-        
-        
-        
-    })
     
     }
     
