@@ -18,7 +18,7 @@ class PodcastDetailedEpisode: UIView {
         didSet{
             
             episodeTitle.text = podcastEpisode.title
-            
+            authorLabel.text = podcastEpisode.author
             guard let url = URL(string: podcastEpisode?.imageUrl ?? "") else {return}
             episodeImage.sd_setImage(with: url, completed: nil)
         }
@@ -29,7 +29,14 @@ class PodcastDetailedEpisode: UIView {
     }
     
     
+    @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var episodeImage: UIImageView!
-    @IBOutlet weak var episodeTitle: UILabel!
+    @IBOutlet weak var episodeTitle: UILabel! {
+        
+        didSet{
+            episodeTitle.numberOfLines = 2
+        }
+    }
+    @IBOutlet weak var authorLabel: UILabel!
     
 }
