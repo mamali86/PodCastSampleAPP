@@ -50,6 +50,24 @@ class PodcastDetailedEpisode: UIView {
     
     @IBAction func handleDismiss(_ sender: Any) {
         self.removeFromSuperview()
+        
+    }
+    
+    
+    fileprivate func setImageBackToOriginalSize() {
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.episodeImage.transform = CGAffineTransform.identity
+
+        }, completion: nil)
+    }
+    
+    
+    fileprivate func scaleDownImage() {
+        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            let scale: CGFloat = 0.7
+            self.episodeImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+            
+        }, completion: nil)
     }
     
     @IBOutlet weak var playPauseButton: UIButton! {
@@ -65,11 +83,13 @@ class PodcastDetailedEpisode: UIView {
         if player.timeControlStatus == .paused {
     player.play()
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            setImageBackToOriginalSize()
 
     }
     else {
     player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+             scaleDownImage()
 
     }
     
@@ -77,7 +97,17 @@ class PodcastDetailedEpisode: UIView {
     }
     
     
-    @IBOutlet weak var episodeImage: UIImageView!
+    @IBOutlet weak var episodeImage: UIImageView!{
+        
+        didSet{
+            let scale: CGFloat = 0.7
+            episodeImage.layer.cornerRadius = 5
+            episodeImage.clipsToBounds = true
+            episodeImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+            
+        }
+        
+    }
     @IBOutlet weak var episodeTitle: UILabel! {
         
         didSet{
