@@ -36,7 +36,6 @@ class ConfigApiManager: NSObject {
             
             completionHandler(feed.toEpisodes())
             
-            
         })
         
     }
