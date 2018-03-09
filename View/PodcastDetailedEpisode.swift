@@ -36,7 +36,7 @@ class PodcastDetailedEpisode: UIView {
         }()
     
     
-    func fetchPlayer(){
+    fileprivate func fetchPlayer(){
         
         guard let url = URL(string: podcastEpisode.podCastUrl ?? "") else {return}
         let playerItem = AVPlayerItem(url: url)
@@ -53,6 +53,7 @@ class PodcastDetailedEpisode: UIView {
         
     }
     
+    fileprivate let shrunkenTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     
     fileprivate func setImageBackToOriginalSize() {
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
@@ -64,8 +65,7 @@ class PodcastDetailedEpisode: UIView {
     
     fileprivate func scaleDownImage() {
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            let scale: CGFloat = 0.7
-            self.episodeImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+            self.episodeImage.transform = self.shrunkenTransform
             
         }, completion: nil)
     }
@@ -92,18 +92,27 @@ class PodcastDetailedEpisode: UIView {
              scaleDownImage()
 
     }
+    }
     
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let time = CMTime(value: 1, timescale: 3)
+        NSValue(time: time)
+        let times = [NSValue(time: time)]
+        player.addBoundaryTimeObserver(forTimes: times, queue: .main) {
+            self.setImageBackToOriginalSize()
+        }
     }
     
     
     @IBOutlet weak var episodeImage: UIImageView!{
         
         didSet{
-            let scale: CGFloat = 0.7
             episodeImage.layer.cornerRadius = 5
             episodeImage.clipsToBounds = true
-            episodeImage.transform = CGAffineTransform(scaleX: scale, y: scale)
+            episodeImage.transform = shrunkenTransform
             
         }
         
