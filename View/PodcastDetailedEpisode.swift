@@ -47,7 +47,6 @@ class PodcastDetailedEpisode: UIView {
     }
 
     
-    
     @IBAction func handleDismiss(_ sender: Any) {
         self.removeFromSuperview()
         
@@ -95,17 +94,67 @@ class PodcastDetailedEpisode: UIView {
     }
     
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
+    fileprivate func observeStartResize() {
         let time = CMTime(value: 1, timescale: 3)
-        NSValue(time: time)
         let times = [NSValue(time: time)]
         player.addBoundaryTimeObserver(forTimes: times, queue: .main) {
             self.setImageBackToOriginalSize()
         }
     }
     
+    fileprivate func updateSlider() {
+    
+    let trackingTimeSeconds = CMTimeGetSeconds(player.currentTime())
+    
+    let TSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(1, 1))
+    let percentage =  trackingTimeSeconds / TSeconds
+    self.timeSlider.value =  Float(percentage)
+    
+    }
+    
+    fileprivate func startEndSlider() {
+        let interval = CMTime(value: 1, timescale: 2)
+        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (progresstime) in
+            
+            let currentTime = progresstime.toProgressTime()
+            self.startTimeLabel.text = currentTime
+            
+            guard let podcastDuration = self.player.currentItem?.duration else {return}
+            
+            self.endTimeLabel.text = podcastDuration.toProgressTime()
+//            let trackingTimeSeconds = CMTimeGetSeconds(progresstime)
+//             let TSeconds = CMTimeGetSeconds(podcastDuration)
+//            self.timeSlider.value =  Float(trackingTimeSeconds / TSeconds)
+            self.updateSlider()
+            
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        observeStartResize()
+        
+        startEndSlider()
+    }
+    
+    
+    @IBOutlet weak var startTimeLabel: UILabel!
+    
+    @IBOutlet weak var endTimeLabel: UILabel! {
+        
+        didSet{
+            endTimeLabel.text = "--:--:--"
+        }
+    }
+    
+    @IBOutlet weak var timeSlider: UISlider! {
+        didSet {
+            timeSlider.value = 0
+            
+        }
+        
+    }
     
     @IBOutlet weak var episodeImage: UIImageView!{
         

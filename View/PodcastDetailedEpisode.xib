@@ -57,13 +57,13 @@
                                     <rect key="frame" x="0.0" y="415" width="327" height="22"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydj-3Y-rEQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="254.66666666666666" height="22"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="71.333333333333329" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="88:88:88" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1q-Ub-RCy">
-                                            <rect key="frame" x="254.66666666666671" y="0.0" width="72.333333333333343" height="22"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="--:--:--" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r1q-Ub-RCy">
+                                            <rect key="frame" x="71.333333333333343" y="0.0" width="255.66666666666669" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -172,9 +172,12 @@
             <viewLayoutGuide key="safeArea" id="D82-mz-zXW"/>
             <connections>
                 <outlet property="authorLabel" destination="VNv-7J-6w9" id="nK7-ir-C4C"/>
+                <outlet property="endTimeLabel" destination="r1q-Ub-RCy" id="i37-Z6-rdE"/>
                 <outlet property="episodeImage" destination="A8c-bp-XkI" id="D7g-GW-FWa"/>
                 <outlet property="episodeTitle" destination="Cov-DQ-9ft" id="Oco-Yi-ART"/>
                 <outlet property="playPauseButton" destination="RGC-c6-B95" id="gVD-eA-goi"/>
+                <outlet property="startTimeLabel" destination="ydj-3Y-rEQ" id="0tL-Gm-67I"/>
+                <outlet property="timeSlider" destination="pSN-y7-hJO" id="u4x-Bw-RX6"/>
             </connections>
             <point key="canvasLocation" x="19" y="50"/>
         </view>
