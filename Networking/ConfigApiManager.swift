@@ -33,7 +33,7 @@ class ConfigApiManager: NSObject {
             }
             
             guard let feed = result.rssFeed else {return}
-            
+    
             completionHandler(feed.toEpisodes())
             
         })

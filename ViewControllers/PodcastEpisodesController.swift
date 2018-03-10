@@ -78,9 +78,7 @@ class PodcastEpisodesController: UITableViewController {
         let window = UIApplication.shared.keyWindow
         let PodcastDetailedEpisode = Bundle.main.loadNibNamed("PodcastDetailedEpisode", owner: self, options: nil)?.first as! PodcastDetailedEpisode
         PodcastDetailedEpisode.podcastEpisode = podcastEpisodes
-
         PodcastDetailedEpisode.frame = self.view.frame
-    
         window?.addSubview(PodcastDetailedEpisode)
         
  

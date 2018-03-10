@@ -139,6 +139,11 @@ class PodcastDetailedEpisode: UIView {
     }
     
     
+    
+    
+    //MARK:- IBOutlets setUP
+    
+    
     @IBOutlet weak var startTimeLabel: UILabel!
     
     @IBOutlet weak var endTimeLabel: UILabel! {
@@ -155,6 +160,47 @@ class PodcastDetailedEpisode: UIView {
         }
         
     }
+    
+    
+    @IBAction func handleSliderCurrentTime(_ sender: Any) {
+        
+        if let duration = player.currentItem?.duration {
+        let totalSeconds = CMTimeGetSeconds(duration)
+        let currentValue =  totalSeconds * Float64(timeSlider.value)
+        let seekTime = CMTimeMake(Int64(currentValue), Int32(NSEC_PER_SEC))
+    
+        player.seek(to: seekTime) { (completedSeek) in
+            
+        }
+    
+    }
+    }
+    
+    
+    
+    @IBAction func goBack(_ sender: Any) {
+        
+        seekToCurrentTime(delta: -15)
+    }
+    
+
+    @IBAction func fastForward(_ sender: Any) {
+        
+     seekToCurrentTime(delta: 15)
+    }
+    
+    
+    fileprivate func seekToCurrentTime(delta: Int64) {
+        let currentTime = player.currentTime()
+        let changeTime = CMTimeMake(delta, 1)
+        let moveTo = CMTimeAdd(currentTime, changeTime)
+        player.seek(to: moveTo) { (completedSeek) in
+            
+        }
+        
+    }
+    
+
     
     @IBOutlet weak var episodeImage: UIImageView!{
         
@@ -173,5 +219,14 @@ class PodcastDetailedEpisode: UIView {
         }
     }
     @IBOutlet weak var authorLabel: UILabel!
+    
+    
+    @IBAction func handleVolumeChange(_ sender: UISlider) {
+        
+        player.volume = sender.value
+    }
+    
+    
+    
     
 }
