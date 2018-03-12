@@ -28,7 +28,6 @@ class PodcastDetailedEpisode: UIView {
     }
     
     
-    
         let player: AVPlayer = {
             let avpPlayer = AVPlayer()
             avpPlayer.automaticallyWaitsToMinimizeStalling = false
@@ -42,7 +41,6 @@ class PodcastDetailedEpisode: UIView {
         let playerItem = AVPlayerItem(url: url)
         player.replaceCurrentItem(with: playerItem)
         player.play()
-        
         
     }
 
@@ -97,8 +95,13 @@ class PodcastDetailedEpisode: UIView {
     fileprivate func observeStartResize() {
         let time = CMTime(value: 1, timescale: 3)
         let times = [NSValue(time: time)]
-        player.addBoundaryTimeObserver(forTimes: times, queue: .main) {
-            self.setImageBackToOriginalSize()
+        
+        
+//        player has refrence to self
+//        self has  arefrence to player
+        
+        player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
+            self?.setImageBackToOriginalSize()
         }
     }
     
@@ -114,18 +117,16 @@ class PodcastDetailedEpisode: UIView {
     
     fileprivate func startEndSlider() {
         let interval = CMTime(value: 1, timescale: 2)
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (progresstime) in
+        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self]  (progresstime) in
             
             let currentTime = progresstime.toProgressTime()
-            self.startTimeLabel.text = currentTime
+            self?.startTimeLabel.text = currentTime
             
-            guard let podcastDuration = self.player.currentItem?.duration else {return}
+            guard let podcastDuration = self?.player.currentItem?.duration else {return}
             
-            self.endTimeLabel.text = podcastDuration.toProgressTime()
-//            let trackingTimeSeconds = CMTimeGetSeconds(progresstime)
-//             let TSeconds = CMTimeGetSeconds(podcastDuration)
-//            self.timeSlider.value =  Float(trackingTimeSeconds / TSeconds)
-            self.updateSlider()
+            self?.endTimeLabel.text = podcastDuration.toProgressTime()
+
+            self?.updateSlider()
             
         }
     }
