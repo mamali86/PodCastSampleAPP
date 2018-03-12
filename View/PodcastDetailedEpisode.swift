@@ -96,7 +96,6 @@ class PodcastDetailedEpisode: UIView {
         let time = CMTime(value: 1, timescale: 3)
         let times = [NSValue(time: time)]
         
-        
 //        player has refrence to self
 //        self has  arefrence to player
         
@@ -104,6 +103,13 @@ class PodcastDetailedEpisode: UIView {
             self?.setImageBackToOriginalSize()
         }
     }
+    
+    
+    deinit {
+        print("podcastDeialedEpisode being reclaimed ")
+    }
+    
+    
     
     fileprivate func updateSlider() {
     

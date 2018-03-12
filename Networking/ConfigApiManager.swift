@@ -17,13 +17,20 @@ class ConfigApiManager: NSObject {
     
     
     func fetchEpisoides(podcastFeedURL: String, completionHandler: @escaping ([PodcastEpisode]) -> ()) {
-                
+        
+        
+        
         let secureFeedURL = podcastFeedURL.contains("https") ? podcastFeedURL :
             podcastFeedURL.replacingOccurrences(of: "http", with: "https")
         
         
         guard let url = URL(string: secureFeedURL) else {return}
-        let parser = FeedParser(URL: url)
+        
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            
+            let parser = FeedParser(URL: url)
         parser?.parseAsync(result: { (result) in
             print("Successfully parse feed", result.isSuccess)
             
@@ -38,6 +45,7 @@ class ConfigApiManager: NSObject {
             
         })
         
+    }
     }
     
     func fetchPodcasts(searchtext: String, completionHandler: @escaping ([Podcast]) -> ()) {

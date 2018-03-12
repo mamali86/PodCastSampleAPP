@@ -72,6 +72,17 @@ class PodcastEpisodesController: UITableViewController {
         return 134
     }
     
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityIndicator.startAnimating()
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return podcastEpisodes.isEmpty ? 200 : 0
+    }
+    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let podcastEpisodes = self.podcastEpisodes[indexPath.row]
