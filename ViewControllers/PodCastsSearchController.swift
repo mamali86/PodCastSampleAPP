@@ -22,7 +22,7 @@ class PodCastsSearchController: UITableViewController, UISearchControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar(searchController.searchBar, textDidChange: "BrianVoong")
+//        searchBar(searchController.searchBar, textDidChange: "BrianVoong")
         setupTableView()
         setupSearchBar()
     }
@@ -41,11 +41,19 @@ class PodCastsSearchController: UITableViewController, UISearchControllerDelegat
     var timer: Timer?
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
+        
+        podcasts = []
+        tableView.reloadData()
+    
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            
+        
+          
             ConfigApiManager.sharedInstance.fetchPodcasts(searchtext: searchText, completionHandler: { (podcasts: [Podcast]) in
                 self.podcasts = podcasts
                 self.tableView.reloadData()
+                
             })
         })
      
@@ -71,7 +79,7 @@ class PodCastsSearchController: UITableViewController, UISearchControllerDelegat
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     
-        return self.podcasts.count > 0 ? 0 : 250
+        return self.podcasts.isEmpty  && searchController.searchBar.text?.isEmpty == true ? 250 : 0
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return podcasts.count
@@ -86,8 +94,31 @@ class PodCastsSearchController: UITableViewController, UISearchControllerDelegat
         let podCastsSearchController = PodcastEpisodesController()
         podCastsSearchController.podcast = selectedPodcast
         navigationController?.pushViewController(podCastsSearchController, animated: true)
-    
 
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return self.podcasts.isEmpty && searchController.searchBar.text?.isEmpty == false ? 250 : 0
+    }
+
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let activityIndictor = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityIndictor.startAnimating()
+        activityIndictor.color = .darkGray
+        let label = UILabel()
+        label.text = "Currently Searching"
+        label.textColor = .purple
+        label.textAlignment = .center
+        let stackView = UIStackView(arrangedSubviews: [activityIndictor, label])
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: 363).isActive = true
+        return stackView
     }
     
     
