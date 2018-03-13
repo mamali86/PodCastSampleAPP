@@ -84,10 +84,15 @@ class PodcastEpisodesController: UITableViewController {
     }
     
     
+    static func loadNib() -> PodcastDetailedEpisode {
+        return  Bundle.main.loadNibNamed("PodcastDetailedEpisode", owner: self, options: nil)?.first as! PodcastDetailedEpisode
+    }
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let podcastEpisodes = self.podcastEpisodes[indexPath.row]
         let window = UIApplication.shared.keyWindow
-        let PodcastDetailedEpisode = Bundle.main.loadNibNamed("PodcastDetailedEpisode", owner: self, options: nil)?.first as! PodcastDetailedEpisode
+        let PodcastDetailedEpisode = PodcastEpisodesController.loadNib()
         PodcastDetailedEpisode.podcastEpisode = podcastEpisodes
         PodcastDetailedEpisode.frame = self.view.frame
         window?.addSubview(PodcastDetailedEpisode)
