@@ -12,7 +12,8 @@ import AVKit
 
 
 
-class PodcastDetailedEpisode: UIView {
+class PodcastDetailedEpisode: UIView  {
+    
     
     
     var podcastEpisode: PodcastEpisode! {
@@ -22,9 +23,9 @@ class PodcastDetailedEpisode: UIView {
             authorLabel.text = podcastEpisode.author
             guard let url = URL(string: podcastEpisode?.imageUrl ?? "") else {return}
             episodeImage.sd_setImage(with: url, completed: nil)
+            
             fetchPlayer()
         }
-        
     }
     
     
@@ -36,7 +37,6 @@ class PodcastDetailedEpisode: UIView {
     
     
     fileprivate func fetchPlayer(){
-        
         guard let url = URL(string: podcastEpisode.podCastUrl ?? "") else {return}
         let playerItem = AVPlayerItem(url: url)
         player.replaceCurrentItem(with: playerItem)
@@ -45,13 +45,18 @@ class PodcastDetailedEpisode: UIView {
     }
 
     
+    
+    
     @IBAction func handleDismiss(_ sender: Any) {
-        self.removeFromSuperview()
-        
+//        self.removeFromSuperview()
+        guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
+        mainTabBarController.minimisePlayerDetails()
     }
     
-    fileprivate let shrunkenTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     
+
+    
+    fileprivate let shrunkenTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     fileprivate func setImageBackToOriginalSize() {
         UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.episodeImage.transform = CGAffineTransform.identity
@@ -71,9 +76,7 @@ class PodcastDetailedEpisode: UIView {
         didSet{
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             playPauseButton.addTarget(self, action: #selector(handleplayPause), for: .touchUpInside)
-           
         }
-    
     }
     
     @objc func handleplayPause() {
@@ -102,6 +105,11 @@ class PodcastDetailedEpisode: UIView {
         player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             self?.setImageBackToOriginalSize()
         }
+    }
+    
+    
+    static func initFromNib() -> PodcastDetailedEpisode {
+        return Bundle.main.loadNibNamed("PodcastDetailedEpisode", owner: self, options: nil)?.first as! PodcastDetailedEpisode
     }
     
     
@@ -140,11 +148,20 @@ class PodcastDetailedEpisode: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
+
         observeStartResize()
-        
         startEndSlider()
+        
+
     }
+
     
+    @objc func handleTapMaximize() {
+
+         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
+        mainTabBarController?.maximisePlayerDetails()
+        }
     
     
     
@@ -179,20 +196,16 @@ class PodcastDetailedEpisode: UIView {
         player.seek(to: seekTime) { (completedSeek) in
             
         }
-    
     }
     }
-    
     
     
     @IBAction func goBack(_ sender: Any) {
-        
         seekToCurrentTime(delta: -15)
     }
     
 
     @IBAction func fastForward(_ sender: Any) {
-        
      seekToCurrentTime(delta: 15)
     }
     

@@ -96,7 +96,6 @@ class PodcastEpisodesController: UITableViewController {
         PodcastDetailedEpisode.podcastEpisode = podcastEpisodes
         PodcastDetailedEpisode.frame = self.view.frame
         window?.addSubview(PodcastDetailedEpisode)
-        
  
     }
     
