@@ -11,6 +11,7 @@ import UIKit
 class MainTabBarController: UITabBarController {
     
     var routeManager: RouteManager?
+//    var podcastEpisode: PodcastEpisode?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,8 +19,9 @@ class MainTabBarController: UITabBarController {
         tabBar.tintColor = .purple
         setupViewControllers()
         setupPlayerDetailsView()
+
 //        perform(#selector(minimisePlayerDetails), with: nil, afterDelay: 1)
-        perform(#selector(maximisePlayerDetails), with: nil, afterDelay: 1)
+//        perform(#selector(maximisePlayerDetails), with: nil, afterDelay: 1)
     }
     
     //MARK:- Setup Functions
@@ -29,36 +31,45 @@ class MainTabBarController: UITabBarController {
     }
     
     
-    
-    
+    let podcastEpisodePlay = PodcastEpisodesController.loadNib()
     var topAnchorAnimation: NSLayoutConstraint!
     var topAnchorMinimisedAnimation: NSLayoutConstraint!
     
-    func minimisePlayerDetails() {
+    func minimisePlayerDetails(podcastEpisode: PodcastEpisode?) {
        
         topAnchorAnimation.isActive = false
         topAnchorMinimisedAnimation.isActive = true
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
+            
+            self.tabBar.transform = CGAffineTransform.identity
+            
+            
+            
         }, completion: nil)
     }
     
     
-    @objc func maximisePlayerDetails() {
+     func maximisePlayerDetails(podcastEpisode: PodcastEpisode?) {
         topAnchorAnimation.isActive = true
         topAnchorAnimation.constant = 0
         topAnchorMinimisedAnimation.isActive = false
+        
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
+            
+            
+            self.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+            
+            
         }, completion: nil)
     
     }
     
-    let podcastEpisodePlay = PodcastEpisodesController.loadNib()
 
     
     func setupPlayerDetailsView() {
-        podcastEpisodePlay.backgroundColor = .red
         view.insertSubview(podcastEpisodePlay, belowSubview: tabBar)
         podcastEpisodePlay.translatesAutoresizingMaskIntoConstraints = false
         topAnchorAnimation = podcastEpisodePlay.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height)

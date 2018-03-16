@@ -90,12 +90,20 @@ class PodcastEpisodesController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
+        let PodcastDetailedEpisode = mainTabBarController?.podcastEpisodePlay
         let podcastEpisodes = self.podcastEpisodes[indexPath.row]
-        let window = UIApplication.shared.keyWindow
-        let PodcastDetailedEpisode = PodcastEpisodesController.loadNib()
-        PodcastDetailedEpisode.podcastEpisode = podcastEpisodes
-        PodcastDetailedEpisode.frame = self.view.frame
-        window?.addSubview(PodcastDetailedEpisode)
+
+        PodcastDetailedEpisode?.podcastEpisode = podcastEpisodes
+
+        mainTabBarController?.maximisePlayerDetails(podcastEpisode: podcastEpisodes)
+//        let window = UIApplication.shared.keyWindow
+//        let PodcastDetailedEpisode = PodcastEpisodesController.loadNib()
+//        PodcastDetailedEpisode.frame = self.view.frame
+//        window?.addSubview(PodcastDetailedEpisode)
+        
+        
  
     }
     

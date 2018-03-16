@@ -14,8 +14,6 @@ import AVKit
 
 class PodcastDetailedEpisode: UIView  {
     
-    
-    
     var podcastEpisode: PodcastEpisode! {
         
         didSet{
@@ -50,7 +48,8 @@ class PodcastDetailedEpisode: UIView  {
     @IBAction func handleDismiss(_ sender: Any) {
 //        self.removeFromSuperview()
         guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
-        mainTabBarController.minimisePlayerDetails()
+        mainTabBarController.minimisePlayerDetails(podcastEpisode: podcastEpisode)
+        
     }
     
     
@@ -160,7 +159,7 @@ class PodcastDetailedEpisode: UIView  {
     @objc func handleTapMaximize() {
 
          let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-        mainTabBarController?.maximisePlayerDetails()
+        mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
         }
     
     
@@ -220,7 +219,6 @@ class PodcastDetailedEpisode: UIView  {
         
     }
     
-
     
     @IBOutlet weak var episodeImage: UIImageView!{
         
