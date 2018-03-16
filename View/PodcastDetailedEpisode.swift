@@ -18,9 +18,11 @@ class PodcastDetailedEpisode: UIView  {
         
         didSet{
             episodeTitle.text = podcastEpisode.title
+            miniEpisodeTitle.text = podcastEpisode.title
             authorLabel.text = podcastEpisode.author
             guard let url = URL(string: podcastEpisode?.imageUrl ?? "") else {return}
             episodeImage.sd_setImage(with: url, completed: nil)
+            minimisedEpisodeImage.sd_setImage(with: url, completed: nil)
             
             fetchPlayer()
         }
@@ -82,12 +84,15 @@ class PodcastDetailedEpisode: UIView  {
         if player.timeControlStatus == .paused {
     player.play()
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             setImageBackToOriginalSize()
 
     }
     else {
     player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+
              scaleDownImage()
 
     }
@@ -166,6 +171,42 @@ class PodcastDetailedEpisode: UIView  {
     
     //MARK:- IBOutlets setUP
     
+    
+    
+    @IBOutlet weak var minimisedStackView: UIView!
+    
+    
+    @IBOutlet weak var minimisedEpisodeImage: UIImageView! {
+        
+        didSet{
+            
+            minimisedEpisodeImage.layer.cornerRadius = 5
+            minimisedEpisodeImage.clipsToBounds = true
+        }
+    }
+    
+
+    @IBOutlet weak var miniEpisodeTitle: UILabel!
+    
+    
+    @IBOutlet weak var miniPausePlay: UIButton!{
+        
+        didSet{
+            
+            miniPausePlay.addTarget(self, action: #selector(handleplayPause), for: .touchUpInside)
+        }
+        
+    }
+    
+    
+    @IBAction func miniFastForward(_ sender: Any) {
+         seekToCurrentTime(delta: 15)
+    }
+    
+    
+    
+    @IBOutlet weak var MaximisedStackView: UIStackView!
+
     
     @IBOutlet weak var startTimeLabel: UILabel!
     

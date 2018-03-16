@@ -44,6 +44,9 @@ class MainTabBarController: UITabBarController {
             
             self.tabBar.transform = CGAffineTransform.identity
             
+            self.podcastEpisodePlay.minimisedStackView.alpha = 1
+            self.podcastEpisodePlay.MaximisedStackView.alpha = 0 
+            
         }, completion: nil)
     }
     
@@ -59,6 +62,9 @@ class MainTabBarController: UITabBarController {
             
             
             self.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+            
+            self.podcastEpisodePlay.minimisedStackView.alpha = 0
+            self.podcastEpisodePlay.MaximisedStackView.alpha = 1
             
             
         }, completion: nil)
