@@ -44,8 +44,6 @@ class MainTabBarController: UITabBarController {
             
             self.tabBar.transform = CGAffineTransform.identity
             
-            
-            
         }, completion: nil)
     }
     

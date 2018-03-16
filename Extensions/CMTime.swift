@@ -12,6 +12,10 @@ extension CMTime {
     
     func toProgressTime() -> String {
     
+        if CMTimeGetSeconds(self).isNaN {
+            return "--:--"
+
+        }
     
     let trackingTimeSeconds = Int(CMTimeGetSeconds(self))
     let trackingSeconds = trackingTimeSeconds % 60
