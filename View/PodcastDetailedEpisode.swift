@@ -45,8 +45,6 @@ class PodcastDetailedEpisode: UIView  {
     }
 
     
-    
-    
     @IBAction func handleDismiss(_ sender: Any) {
 //        self.removeFromSuperview()
         guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
@@ -54,8 +52,6 @@ class PodcastDetailedEpisode: UIView  {
         
     }
     
-    
-
     
     fileprivate let shrunkenTransform = CGAffineTransform(scaleX: 0.7, y: 0.7)
     fileprivate func setImageBackToOriginalSize() {
@@ -154,7 +150,8 @@ class PodcastDetailedEpisode: UIView  {
         super.awakeFromNib()
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
-
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+    
         observeStartResize()
         startEndSlider()
         
@@ -168,6 +165,31 @@ class PodcastDetailedEpisode: UIView  {
         mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
         }
     
+    
+    @objc func handlePan(gesture: UIPanGestureRecognizer){
+        
+        if gesture.state == .began {
+            print("Began")
+            
+        } else if gesture.state == .changed {
+            
+            let translation = gesture.translation(in: self.superview)
+            self.transform = CGAffineTransform(translationX: 0, y: translation.y)
+            
+            minimisedStackView.alpha = 1 + (translation.y) / 200
+            MaximisedStackView.alpha = (-translation.y) / 200
+            
+        } else if gesture.state == .ended {
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                
+                self.transform = CGAffineTransform.identity
+                self.MaximisedStackView.alpha = 0
+
+            }, completion: nil)
+        
+        }
+    }
     
     
     //MARK:- IBOutlets setUP
@@ -232,7 +254,7 @@ class PodcastDetailedEpisode: UIView  {
         if let duration = player.currentItem?.duration {
         let totalSeconds = CMTimeGetSeconds(duration)
         let currentValue =  totalSeconds * Float64(timeSlider.value)
-        let seekTime = CMTimeMake(Int64(currentValue), Int32(NSEC_PER_SEC))
+        let seekTime = CMTimeMake(Int64(currentValue), 1)
     
         player.seek(to: seekTime) { (completedSeek) in
             

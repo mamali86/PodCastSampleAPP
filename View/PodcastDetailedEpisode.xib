@@ -20,6 +20,14 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zqc-aS-7lf">
                     <rect key="frame" x="0.0" y="44" width="375" height="64"/>
                     <subviews>
+                        <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jJ1-pa-DaL">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.66666666666666663"/>
+                            <color key="backgroundColor" red="0.093102331606217614" green="0.093102331606217614" blue="0.093102331606217614" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="0.5" id="Nae-My-mym"/>
+                            </constraints>
+                        </view>
                         <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Bbr-cQ-Wzs">
                             <rect key="frame" x="8" y="8" width="359" height="64"/>
                             <subviews>
@@ -64,9 +72,12 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="Bbr-cQ-Wzs" secondAttribute="bottom" constant="-8" id="8NQ-1b-G2W"/>
+                        <constraint firstItem="jJ1-pa-DaL" firstAttribute="top" secondItem="Zqc-aS-7lf" secondAttribute="top" id="KJh-KA-lFK"/>
                         <constraint firstItem="Bbr-cQ-Wzs" firstAttribute="top" secondItem="Zqc-aS-7lf" secondAttribute="top" constant="8" id="LvG-sS-lIJ"/>
+                        <constraint firstAttribute="trailing" secondItem="jJ1-pa-DaL" secondAttribute="trailing" id="PtM-CF-Yy2"/>
                         <constraint firstAttribute="trailing" secondItem="Bbr-cQ-Wzs" secondAttribute="trailing" constant="8" id="Voc-hC-0bg"/>
                         <constraint firstAttribute="height" constant="64" id="Zqw-BF-PiN"/>
+                        <constraint firstItem="jJ1-pa-DaL" firstAttribute="leading" secondItem="Zqc-aS-7lf" secondAttribute="leading" id="dc5-ha-D0j"/>
                         <constraint firstItem="Bbr-cQ-Wzs" firstAttribute="leading" secondItem="Zqc-aS-7lf" secondAttribute="leading" constant="8" id="hDg-Jd-gmX"/>
                     </constraints>
                 </view>
