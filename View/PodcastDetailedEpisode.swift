@@ -108,6 +108,7 @@ class PodcastDetailedEpisode: UIView  {
         
         player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             self?.setImageBackToOriginalSize()
+            self?.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
         }
     }
     
