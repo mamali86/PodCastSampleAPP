@@ -176,14 +176,15 @@ class PodcastDetailedEpisode: UIView  {
             let translation = gesture.translation(in: self.superview)
             self.transform = CGAffineTransform(translationX: 0, y: translation.y)
             
-            minimisedStackView.alpha = 1 + (translation.y) / 200
-            MaximisedStackView.alpha = (-translation.y) / 200
+            minimisedStackView.alpha = 1 + translation.y / 200
+            MaximisedStackView.alpha = -translation.y / 200
             
         } else if gesture.state == .ended {
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 
                 self.transform = CGAffineTransform.identity
+                self.minimisedStackView.alpha = 1
                 self.MaximisedStackView.alpha = 0
 
             }, completion: nil)
