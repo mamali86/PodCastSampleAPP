@@ -34,6 +34,7 @@ class MainTabBarController: UITabBarController {
     let podcastEpisodePlay = PodcastEpisodesController.loadNib()
     var topAnchorAnimation: NSLayoutConstraint!
     var topAnchorMinimisedAnimation: NSLayoutConstraint!
+    var bottomAnchorAnimation: NSLayoutConstraint!
     
     func minimisePlayerDetails(podcastEpisode: PodcastEpisode?) {
        
@@ -56,6 +57,7 @@ class MainTabBarController: UITabBarController {
         topAnchorAnimation.constant = 0
         topAnchorMinimisedAnimation.isActive = false
         
+        bottomAnchorAnimation.constant = 0 
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
@@ -80,7 +82,8 @@ class MainTabBarController: UITabBarController {
         topAnchorAnimation.isActive = true
          topAnchorMinimisedAnimation = podcastEpisodePlay.topAnchor.constraint(equalTo: tabBar.topAnchor, constant: -64)
 //        topAnchorAnimation.isActive = true
-         podcastEpisodePlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        bottomAnchorAnimation = podcastEpisodePlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        bottomAnchorAnimation.isActive = true
         podcastEpisodePlay.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         podcastEpisodePlay.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
         
