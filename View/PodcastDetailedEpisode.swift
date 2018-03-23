@@ -50,6 +50,7 @@ class PodcastDetailedEpisode: UIView  {
         guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
         mainTabBarController.minimisePlayerDetails(podcastEpisode: podcastEpisode)
         
+        panGesture.isEnabled = true
     }
     
     
@@ -146,11 +147,15 @@ class PodcastDetailedEpisode: UIView  {
         }
     }
     
+    
+    var panGesture: UIPanGestureRecognizer!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
-        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        addGestureRecognizer(panGesture)
     
         observeStartResize()
         startEndSlider()
@@ -163,6 +168,7 @@ class PodcastDetailedEpisode: UIView  {
 
          let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
         mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
+        panGesture.isEnabled = false
         }
     
     
@@ -202,7 +208,7 @@ class PodcastDetailedEpisode: UIView  {
                 
                 let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
                 mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
-                
+                gesture.isEnabled = false
             } else {
             self.minimisedStackView.alpha = 1
             self.MaximisedStackView.alpha = 0

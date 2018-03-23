@@ -39,7 +39,9 @@ class MainTabBarController: UITabBarController {
     func minimisePlayerDetails(podcastEpisode: PodcastEpisode?) {
        
         topAnchorAnimation.isActive = false
+        bottomAnchorAnimation.constant = view.frame.height
         topAnchorMinimisedAnimation.isActive = true
+
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
             
@@ -53,11 +55,12 @@ class MainTabBarController: UITabBarController {
     
     
      func maximisePlayerDetails(podcastEpisode: PodcastEpisode?) {
+        topAnchorMinimisedAnimation.isActive = false
         topAnchorAnimation.isActive = true
         topAnchorAnimation.constant = 0
-        topAnchorMinimisedAnimation.isActive = false
         
-        bottomAnchorAnimation.constant = 0 
+        
+        bottomAnchorAnimation.constant = 0
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
@@ -82,7 +85,7 @@ class MainTabBarController: UITabBarController {
         topAnchorAnimation.isActive = true
          topAnchorMinimisedAnimation = podcastEpisodePlay.topAnchor.constraint(equalTo: tabBar.topAnchor, constant: -64)
 //        topAnchorAnimation.isActive = true
-        bottomAnchorAnimation = podcastEpisodePlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        bottomAnchorAnimation = podcastEpisodePlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.frame.height)
         bottomAnchorAnimation.isActive = true
         podcastEpisodePlay.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         podcastEpisodePlay.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
