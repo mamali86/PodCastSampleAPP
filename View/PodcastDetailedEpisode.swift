@@ -47,10 +47,9 @@ class PodcastDetailedEpisode: UIView  {
     
     @IBAction func handleDismiss(_ sender: Any) {
 //        self.removeFromSuperview()
-        guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else {return}
-        mainTabBarController.minimisePlayerDetails(podcastEpisode: podcastEpisode)
+
+        UIApplication.mainTabBarController()?.minimisePlayerDetails(podcastEpisode: podcastEpisode)
         
-        panGesture.isEnabled = true
     }
     
     
@@ -155,20 +154,45 @@ class PodcastDetailedEpisode: UIView  {
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addGestureRecognizer(panGesture)
-    
+        minimisedStackView.addGestureRecognizer(panGesture)
+        
+        
+        MaximisedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleMaximisedPan)))
+        
         observeStartResize()
         startEndSlider()
         
 
     }
+    
 
+    @objc func handleMaximisedPan(gesture: UIPanGestureRecognizer) {
+    
+        let translation = gesture.translation(in: self.superview)
+        
+        
+        if gesture.state == .changed {
+            
+            self.transform = CGAffineTransform(translationX: 0, y: translation.y)
+        } else if gesture.state == .ended {
+            
+            self.transform = CGAffineTransform.identity
+
+            if translation.y > 50 {
+                
+             UIApplication.mainTabBarController()?.minimisePlayerDetails(podcastEpisode: nil)
+                
+                
+            }
+            
+        }
+    }
     
     @objc func handleTapMaximize() {
 
-         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-        mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
-        panGesture.isEnabled = false
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+        UIApplication.mainTabBarController()?.maximisePlayerDetails(podcastEpisode: nil)
+        }, completion: nil)
         }
     
     
@@ -206,9 +230,7 @@ class PodcastDetailedEpisode: UIView  {
             
             if translation.y < -200 || velocity.y < -500 {
                 
-                let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
-                mainTabBarController?.maximisePlayerDetails(podcastEpisode: nil)
-                gesture.isEnabled = false
+                UIApplication.mainTabBarController()?.maximisePlayerDetails(podcastEpisode: nil)
             } else {
             self.minimisedStackView.alpha = 1
             self.MaximisedStackView.alpha = 0
