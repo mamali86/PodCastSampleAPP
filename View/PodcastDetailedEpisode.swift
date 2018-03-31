@@ -9,6 +9,7 @@
 import UIKit
 //import SDWebImage
 import AVKit
+import MediaPlayer
 
 
 
@@ -152,10 +153,11 @@ class PodcastDetailedEpisode: UIView  {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        setUpRemoteControll()
+        setUpAudioSession()
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         minimisedStackView.addGestureRecognizer(panGesture)
-        
         
         MaximisedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleMaximisedPan)))
         
@@ -163,6 +165,51 @@ class PodcastDetailedEpisode: UIView  {
         startEndSlider()
         
 
+    }
+    
+    fileprivate func setUpRemoteControll() {
+    UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        let commandCentre = MPRemoteCommandCenter.shared()
+        
+        commandCentre.playCommand.isEnabled = true
+        commandCentre.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.player.play()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            self.miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            return .success
+        }
+        
+        
+        commandCentre.pauseCommand.isEnabled = true
+        commandCentre.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            
+            self.player.pause()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            self.miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            return .success
+        }
+        
+        
+        commandCentre.togglePlayPauseCommand.isEnabled = true
+        commandCentre.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.handleplayPause()
+            return .success
+        }
+    
+    }
+    
+    fileprivate func setUpAudioSession() {
+        do {
+            
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+
+        } catch let sessionErr {
+            print("failed to activate session", sessionErr)
+            
+        }
+        
     }
     
 

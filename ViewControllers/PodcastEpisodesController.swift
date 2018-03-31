@@ -48,10 +48,9 @@ class PodcastEpisodesController: UITableViewController {
     //MARK:- SetUp Work
     
     fileprivate func setUpWork() {
-        
         let nib = UINib(nibName: "EpisodeCell", bundle: nil)
-     tableView.register(nib, forCellReuseIdentifier: epiCellID)
-    tableView.tableFooterView = UIView()
+        tableView.register(nib, forCellReuseIdentifier: epiCellID)
+        tableView.tableFooterView = UIView()
     }
 
     

@@ -358,6 +358,11 @@
 					9BD9696B203D59FC00B665D7 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					9BD9697F203D59FD00B665D7 = {
 						CreatedOnToolsVersion = 9.2;
