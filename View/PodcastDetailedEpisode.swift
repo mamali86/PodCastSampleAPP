@@ -232,7 +232,47 @@ class PodcastDetailedEpisode: UIView  {
             self.handleplayPause()
             return .success
         }
+        
+        
+        commandCentre.nextTrackCommand.isEnabled = true
+        
+        commandCentre.nextTrackCommand.addTarget(self, action: #selector(handleNextEpisode))
+        
+        
+        commandCentre.previousTrackCommand.isEnabled = true
+        commandCentre.previousTrackCommand.addTarget(self, action: #selector(handlePreviousEpisode))
     
+    }
+    
+    var podcastPlayListEpisodes = [PodcastEpisode]()
+    
+    @objc fileprivate func handlePreviousEpisode(){
+    
+    }
+    @objc fileprivate func handleNextEpisode(){
+     
+//        podcastPlayListEpisodes.forEach({print($0.title)})
+        
+        if podcastPlayListEpisodes.count == 0 {
+            return
+        }
+        var nextEpisode: PodcastEpisode?
+        let currentEpisodeIndex = podcastPlayListEpisodes.index { (episode) -> Bool in
+            return self.podcastEpisode.title == episode.title && self.podcastEpisode.author == episode.author
+        }
+        
+        guard let index = currentEpisodeIndex else {return}
+        
+        if index == podcastPlayListEpisodes.count - 1 {
+           nextEpisode = podcastPlayListEpisodes[0]
+        }
+        else {
+            nextEpisode = podcastPlayListEpisodes[index + 1]
+        }
+        
+        self.podcastEpisode = nextEpisode
+        
+        
     }
     
     

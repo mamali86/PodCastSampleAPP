@@ -92,11 +92,11 @@ class PodcastEpisodesController: UITableViewController {
         
         let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController
         let PodcastDetailedEpisode = mainTabBarController?.podcastEpisodePlay
-        let podcastEpisodes = self.podcastEpisodes[indexPath.row]
+        let podcastEpisode = self.podcastEpisodes[indexPath.row]
 
-        PodcastDetailedEpisode?.podcastEpisode = podcastEpisodes
+        PodcastDetailedEpisode?.podcastEpisode = podcastEpisode
 
-        mainTabBarController?.maximisePlayerDetails(podcastEpisode: podcastEpisodes)
+        mainTabBarController?.maximisePlayerDetails(podcastEpisode: podcastEpisode, podcastPlayListEpisodes: podcastEpisodes)
 //        let window = UIApplication.shared.keyWindow
 //        let PodcastDetailedEpisode = PodcastEpisodesController.loadNib()
 //        PodcastDetailedEpisode.frame = self.view.frame

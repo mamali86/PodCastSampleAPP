@@ -11,7 +11,7 @@ import UIKit
 class MainTabBarController: UITabBarController {
     
     var routeManager: RouteManager?
-//    var podcastEpisode: PodcastEpisode?
+//    var podcastEpisodes: PodcastEpisode?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +41,7 @@ class MainTabBarController: UITabBarController {
         topAnchorAnimation.isActive = false
         bottomAnchorAnimation.constant = view.frame.height
         topAnchorMinimisedAnimation.isActive = true
+        
 
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
@@ -54,13 +55,18 @@ class MainTabBarController: UITabBarController {
     }
     
     
-     func maximisePlayerDetails(podcastEpisode: PodcastEpisode?) {
+    func maximisePlayerDetails(podcastEpisode: PodcastEpisode?, podcastPlayListEpisodes: [PodcastEpisode] = []) {
         topAnchorMinimisedAnimation.isActive = false
         topAnchorAnimation.isActive = true
         topAnchorAnimation.constant = 0
-        
-        
         bottomAnchorAnimation.constant = 0
+        
+        if podcastEpisode != nil {
+            podcastEpisodePlay.podcastEpisode = podcastEpisode
+            
+        }
+        
+        podcastEpisodePlay.podcastPlayListEpisodes = podcastPlayListEpisodes
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.layoutIfNeeded()
