@@ -23,24 +23,22 @@ class PodcastDetailedEpisode: UIView  {
             authorLabel.text = podcastEpisode.author
             guard let url = URL(string: podcastEpisode?.imageUrl ?? "") else {return}
             episodeImage.sd_setImage(with: url, completed: nil)
-//            minimisedEpisodeImage.sd_setImage(with: url, completed: nil)
-            
             minimisedEpisodeImage.sd_setImage(with: url) { (image, _, _, _) in
                 
                 var nowPlaying = MPNowPlayingInfoCenter.default().nowPlayingInfo
-                guard let image = image else {return}
                 
-                let artWork = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { (_) -> UIImage in
+                let image = self.episodeImage.image ?? UIImage()
+                
+                let artWorkItem = MPMediaItemArtwork(boundsSize: .zero, requestHandler: { (_) -> UIImage in
                     return image
                 })
-                nowPlaying?[MPMediaItemPropertyArtwork] = artWork
+                nowPlaying?[MPMediaItemPropertyArtwork] = artWorkItem
                 
                 
                  MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
             }
             
             setupPlayingNowInfo()
-            
             fetchPlayer()
         }
     }
@@ -52,9 +50,6 @@ class PodcastDetailedEpisode: UIView  {
         
         nowPlaying[MPMediaItemPropertyTitle] = podcastEpisode.title
         nowPlaying[MPMediaItemPropertyArtist] = podcastEpisode.author
-        
-        
-        
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
         
     }
@@ -135,6 +130,7 @@ class PodcastDetailedEpisode: UIView  {
         player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             self?.setImageBackToOriginalSize()
             self?.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            self?.setupLockScreenCurrentTime()
         }
     }
     
@@ -167,33 +163,14 @@ class PodcastDetailedEpisode: UIView  {
             let currentTime = progresstime.toProgressTime()
             self?.startTimeLabel.text = currentTime
             
-            self?.setupLockScreenCurrentTime()
-            
             guard let podcastDuration = self?.player.currentItem?.duration else {return}
+            
             
             self?.endTimeLabel.text = podcastDuration.toProgressTime()
 
             self?.updateSlider()
             
         }
-    }
-    
-    
-    fileprivate func setupLockScreenCurrentTime(){
-        
-        
-        guard let currentItem = player.currentItem else {return}
-        let durationSeconds = CMTimeGetSeconds(currentItem.duration)
-        let elapsedTime = CMTimeGetSeconds(player.currentTime())
-        
-        var nowPlaying = MPNowPlayingInfoCenter.default().nowPlayingInfo
-
-        nowPlaying?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
-        nowPlaying?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
-    
-    
     }
     
     
@@ -213,7 +190,15 @@ class PodcastDetailedEpisode: UIView  {
         observeStartResize()
         startEndSlider()
         
+        
 
+    }
+    
+    fileprivate func setupLockScreenCurrentTime(){
+        
+        guard let currentItem = player.currentItem else {return}
+        let durationSeconds = CMTimeGetSeconds(currentItem.duration)
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
     }
     
     fileprivate func setUpRemoteControll() {
@@ -226,6 +211,7 @@ class PodcastDetailedEpisode: UIView  {
             self.player.play()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            self.setupElapsedTime()
             return .success
         }
         
@@ -236,6 +222,7 @@ class PodcastDetailedEpisode: UIView  {
             self.player.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             self.miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            self.setupElapsedTime()
             return .success
         }
         
@@ -246,6 +233,15 @@ class PodcastDetailedEpisode: UIView  {
             return .success
         }
     
+    }
+    
+    
+    fileprivate func setupElapsedTime(){
+                let elapsedTime = CMTimeGetSeconds(player.currentTime())
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
+
+
+        
     }
     
     fileprivate func setUpAudioSession() {
@@ -404,6 +400,10 @@ class PodcastDetailedEpisode: UIView  {
         let totalSeconds = CMTimeGetSeconds(duration)
         let currentValue =  totalSeconds * Float64(timeSlider.value)
         let seekTime = CMTimeMake(Int64(currentValue), 1)
+            
+            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentValue
+            
+            
     
         player.seek(to: seekTime) { (completedSeek) in
             
