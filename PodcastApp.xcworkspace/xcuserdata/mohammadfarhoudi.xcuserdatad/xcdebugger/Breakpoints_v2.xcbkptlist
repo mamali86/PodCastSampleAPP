@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "View/PodcastDetailedEpisode.swift"
-            timestampString = "544207300.703051"
+            timestampString = "544434485.813899"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "handleDismiss(_:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -23,12 +23,41 @@ class PodcastDetailedEpisode: UIView  {
             authorLabel.text = podcastEpisode.author
             guard let url = URL(string: podcastEpisode?.imageUrl ?? "") else {return}
             episodeImage.sd_setImage(with: url, completed: nil)
-            minimisedEpisodeImage.sd_setImage(with: url, completed: nil)
+//            minimisedEpisodeImage.sd_setImage(with: url, completed: nil)
+            
+            minimisedEpisodeImage.sd_setImage(with: url) { (image, _, _, _) in
+                
+                var nowPlaying = MPNowPlayingInfoCenter.default().nowPlayingInfo
+                guard let image = image else {return}
+                
+                let artWork = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { (_) -> UIImage in
+                    return image
+                })
+                nowPlaying?[MPMediaItemPropertyArtwork] = artWork
+                
+                
+                 MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
+            }
+            
+            setupPlayingNowInfo()
             
             fetchPlayer()
         }
     }
     
+    
+    fileprivate func setupPlayingNowInfo() {
+        
+        var nowPlaying = [String: Any]()
+        
+        nowPlaying[MPMediaItemPropertyTitle] = podcastEpisode.title
+        nowPlaying[MPMediaItemPropertyArtist] = podcastEpisode.author
+        
+        
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
+        
+    }
     
         let player: AVPlayer = {
             let avpPlayer = AVPlayer()
@@ -101,7 +130,7 @@ class PodcastDetailedEpisode: UIView  {
         let times = [NSValue(time: time)]
         
 //        player has refrence to self
-//        self has  arefrence to player
+//        self has  a refrence to player
         
         player.addBoundaryTimeObserver(forTimes: times, queue: .main) { [weak self] in
             self?.setImageBackToOriginalSize()
@@ -138,6 +167,8 @@ class PodcastDetailedEpisode: UIView  {
             let currentTime = progresstime.toProgressTime()
             self?.startTimeLabel.text = currentTime
             
+            self?.setupLockScreenCurrentTime()
+            
             guard let podcastDuration = self?.player.currentItem?.duration else {return}
             
             self?.endTimeLabel.text = podcastDuration.toProgressTime()
@@ -145,6 +176,24 @@ class PodcastDetailedEpisode: UIView  {
             self?.updateSlider()
             
         }
+    }
+    
+    
+    fileprivate func setupLockScreenCurrentTime(){
+        
+        
+        guard let currentItem = player.currentItem else {return}
+        let durationSeconds = CMTimeGetSeconds(currentItem.duration)
+        let elapsedTime = CMTimeGetSeconds(player.currentTime())
+        
+        var nowPlaying = MPNowPlayingInfoCenter.default().nowPlayingInfo
+
+        nowPlaying?[MPMediaItemPropertyPlaybackDuration] = durationSeconds
+        nowPlaying?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
+    
+    
     }
     
     
