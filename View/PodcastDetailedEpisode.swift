@@ -247,8 +247,29 @@ class PodcastDetailedEpisode: UIView  {
     var podcastPlayListEpisodes = [PodcastEpisode]()
     
     @objc fileprivate func handlePreviousEpisode(){
-    
+        
+        if podcastPlayListEpisodes.count == 0 {
+            return
+        }
+        var previousEpisode: PodcastEpisode?
+        let currentEpisodeIndex = podcastPlayListEpisodes.index { (episode) -> Bool in
+            return self.podcastEpisode.title == episode.title && self.podcastEpisode.author == episode.author
+        }
+
+        guard let index = currentEpisodeIndex else {return}
+        
+        if index == 0 {
+            previousEpisode = podcastPlayListEpisodes[podcastPlayListEpisodes.count - 1]
+            
+            } else {
+            
+            previousEpisode = podcastPlayListEpisodes[index - 1]
+        }
+        
+         self.podcastEpisode = previousEpisode
     }
+    
+    
     @objc fileprivate func handleNextEpisode(){
      
 //        podcastPlayListEpisodes.forEach({print($0.title)})
