@@ -38,6 +38,7 @@ class PodcastDetailedEpisode: UIView  {
                  MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlaying
             }
             
+            setUpAudioSession()
             setupPlayingNowInfo()
             fetchPlayer()
         }
@@ -107,12 +108,16 @@ class PodcastDetailedEpisode: UIView  {
             playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             setImageBackToOriginalSize()
+            self.setupElapsedTime(playbackRate: 1)
+
 
     }
     else {
     player.pause()
             playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            self.setupElapsedTime(playbackRate: 0)
+
 
              scaleDownImage()
 
@@ -180,18 +185,47 @@ class PodcastDetailedEpisode: UIView  {
         super.awakeFromNib()
         
         setUpRemoteControll()
-        setUpAudioSession()
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximize)))
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         minimisedStackView.addGestureRecognizer(panGesture)
         
         MaximisedStackView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleMaximisedPan)))
         
+        setupInterruptionObserver()
         observeStartResize()
         startEndSlider()
         
         
 
+    }
+    
+    
+    fileprivate func setupInterruptionObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleInterruption), name: .AVAudioSessionInterruption, object: nil)
+    }
+    
+    
+    @objc fileprivate func handleInterruption(notification: Notification){
+        
+        guard let userInfo = notification.userInfo else {return}
+    
+        guard let type = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt else {return}
+        
+        if type == AVAudioSessionInterruptionType.began.rawValue {
+            playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+
+            
+        } else {
+            
+            guard let option = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else {return}
+            
+            if option == AVAudioSessionInterruptionOptions.shouldResume.rawValue {
+                player.play()
+                playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+                miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+            }
+        }
     }
     
     fileprivate func setupLockScreenCurrentTime(){
@@ -211,7 +245,9 @@ class PodcastDetailedEpisode: UIView  {
             self.player.play()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
             self.miniPausePlay.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-            self.setupElapsedTime()
+            self.setupElapsedTime(playbackRate: 1)
+            
+
             return .success
         }
         
@@ -222,7 +258,8 @@ class PodcastDetailedEpisode: UIView  {
             self.player.pause()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
             self.miniPausePlay.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-            self.setupElapsedTime()
+            self.setupElapsedTime(playbackRate: 0)
+            
             return .success
         }
         
@@ -297,9 +334,10 @@ class PodcastDetailedEpisode: UIView  {
     }
     
     
-    fileprivate func setupElapsedTime(){
+    fileprivate func setupElapsedTime(playbackRate: Float){
                 let elapsedTime = CMTimeGetSeconds(player.currentTime())
                 MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
+               MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
 
 
         
