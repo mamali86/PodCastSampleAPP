@@ -22,7 +22,7 @@ class PodCastsSearchController: UITableViewController, UISearchControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar(searchController.searchBar, textDidChange: "BrianVoong")
+//        searchBar(searchController.searchBar, textDidChange: "BrianVoong")
         setupTableView()
         setupSearchBar()
     }
