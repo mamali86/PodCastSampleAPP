@@ -11,6 +11,8 @@ import FeedKit
 
 class PodcastEpisodesController: UITableViewController {
     
+    let favouritedPodcastKey = "favouritedPodcastKey"
+    
     fileprivate let epiCellID = "epvarllid"
     var podcastEpisodes = [PodcastEpisode]()
     
@@ -20,6 +22,7 @@ class PodcastEpisodesController: UITableViewController {
             
             navigationItem.title = podcast?.trackName
             fetchEpisodes()
+            
         }
     }
     
@@ -37,10 +40,33 @@ class PodcastEpisodesController: UITableViewController {
     
     }
     
+    fileprivate func setupNavigationBarItems() {
+        
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Favourites", style: .plain, target: self, action: #selector(handleSaveFavourite)), UIBarButtonItem(title: "Fetch", style: .plain, target: self, action: #selector(handleFetchSavedPodcasts))]
+    }
+    
+    @objc fileprivate func handleSaveFavourite() {
+        guard let podcast = self.podcast else {return}
+
+         let data = NSKeyedArchiver.archivedData(withRootObject: podcast)
+        
+        UserDefaults.standard.set(data, forKey: favouritedPodcastKey)
+        
+            }
+    
+    @objc fileprivate func handleFetchSavedPodcasts() {
+        
+        guard let data = UserDefaults.standard.data(forKey: favouritedPodcastKey) else {return}
+        
+        let podcast = NSKeyedUnarchiver.unarchiveObject(with: data) as? Podcast
+        print(podcast?.trackName)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpWork()
+        setupNavigationBarItems()
      
     }
     

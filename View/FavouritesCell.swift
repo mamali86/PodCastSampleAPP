@@ -33,19 +33,24 @@ class FavouritesCell: UICollectionViewCell {
     }()
     
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    fileprivate func setupAnchors() {
         let stackView = UIStackView(arrangedSubviews: [favouriteImage, podcastNamelabel, authorNamelabel])
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         favouriteImage.heightAnchor.constraint(equalTo: favouriteImage.widthAnchor).isActive = true
+        
         
         addSubview(stackView)
         stackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         stackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setupAnchors() 
     }
     
     required init?(coder aDecoder: NSCoder) {

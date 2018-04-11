@@ -10,12 +10,16 @@ import UIKit
 
 class FavouritesViewController:  UICollectionViewController, UICollectionViewDelegateFlowLayout {
 let cellID = "cellID"
+    
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView?.backgroundColor = .white
         collectionView?.register(FavouritesCell.self, forCellWithReuseIdentifier: cellID)
     }
+    
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
