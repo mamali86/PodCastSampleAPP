@@ -30,12 +30,16 @@ let cellID = "cellID"
         let alertController = UIAlertController(title: "Remove podcast?", message: "Remove podcast?", preferredStyle: .actionSheet)
         
         alertController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (_) in
-            
+            let selectedPodcast = self.podcasts[selectedIndexPath.item]
             self.podcasts.remove(at: selectedIndexPath.item)
-            self.collectionView?.deleteItems(at: [selectedIndexPath])
             
+            // also remove your favorited podcast from UserDefaults
+            // The simulator doesn't delete immediately, test with your physical iPhone devices
+            self.collectionView?.deleteItems(at: [selectedIndexPath])
+            UserDefaults.toDeletePodcast(podcast: selectedPodcast)
             
         }))
+        
         alertController.addAction(UIAlertAction(title: "no", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
         

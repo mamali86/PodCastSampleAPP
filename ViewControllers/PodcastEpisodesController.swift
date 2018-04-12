@@ -47,13 +47,10 @@ class PodcastEpisodesController: UITableViewController {
     @objc fileprivate func handleSaveFavourite() {
         
         guard let podcast = self.podcast else {return}
-//        let savedPodcasts = UserDefaults.toSaveFavouritePodcasts()
-        
         var listOfPodcasts = UserDefaults.toSaveFavouritePodcasts()
         listOfPodcasts.append(podcast)
-
-         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         
+         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.set(data, forKey: UserDefaults.favouritedPodcastKey)
         
             }

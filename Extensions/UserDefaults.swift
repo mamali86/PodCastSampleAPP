@@ -17,8 +17,21 @@ extension UserDefaults {
         guard let savedPodacstData = UserDefaults.standard.data(forKey: favouritedPodcastKey) else {return []}
         guard let savedPodcasts = NSKeyedUnarchiver.unarchiveObject(with: savedPodacstData) as? [Podcast] else {return []}
         
-        
         return savedPodcasts
+        
+    }
+    
+    static func toDeletePodcast(podcast: Podcast) {
+        
+        let PodcastList = toSaveFavouritePodcasts()
+        
+        let filteredpodcasts = PodcastList.filter { (pod) -> Bool in
+            return pod.artistName != podcast.artistName && pod.trackName != podcast.trackName
+        }
+     
+        let data = NSKeyedArchiver.archivedData(withRootObject: filteredpodcasts)
+        UserDefaults.standard.set(data, forKey: UserDefaults.favouritedPodcastKey)
+
         
     }
     
