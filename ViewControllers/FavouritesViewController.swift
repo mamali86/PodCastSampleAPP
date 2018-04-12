@@ -11,7 +11,7 @@ import UIKit
 class FavouritesViewController:  UICollectionViewController, UICollectionViewDelegateFlowLayout {
 let cellID = "cellID"
     
-
+    var podcasts = UserDefaults.toSaveFavouritePodcasts()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,14 +20,13 @@ let cellID = "cellID"
         collectionView?.register(FavouritesCell.self, forCellWithReuseIdentifier: cellID)
     }
     
-
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
-    }
+        return podcasts.count
+            }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! FavouritesCell
+        cell.savedPodcast = podcasts[indexPath.item]
         return cell
     }
     

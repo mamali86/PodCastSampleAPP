@@ -10,8 +10,7 @@ import UIKit
 import FeedKit
 
 class PodcastEpisodesController: UITableViewController {
-    
-    let favouritedPodcastKey = "favouritedPodcastKey"
+
     
     fileprivate let epiCellID = "epvarllid"
     var podcastEpisodes = [PodcastEpisode]()
@@ -47,30 +46,23 @@ class PodcastEpisodesController: UITableViewController {
     
     @objc fileprivate func handleSaveFavourite() {
         
-        
         guard let podcast = self.podcast else {return}
+//        let savedPodcasts = UserDefaults.toSaveFavouritePodcasts()
         
-        guard let savedPodacstData = UserDefaults.standard.data(forKey: favouritedPodcastKey) else {return}
-        guard let savedPodcasts = NSKeyedUnarchiver.unarchiveObject(with: savedPodacstData) as? [Podcast] else {return}
-        
-        var listOfPodcasts = savedPodcasts
-        
+        var listOfPodcasts = UserDefaults.toSaveFavouritePodcasts()
         listOfPodcasts.append(podcast)
 
          let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         
-        UserDefaults.standard.set(data, forKey: favouritedPodcastKey)
+        UserDefaults.standard.set(data, forKey: UserDefaults.favouritedPodcastKey)
         
             }
     
     @objc fileprivate func handleFetchSavedPodcasts() {
+    
+         let savedPodcasts = UserDefaults.toSaveFavouritePodcasts()
         
-        
-        guard let data = UserDefaults.standard.data(forKey: favouritedPodcastKey) else {return}
-        guard let savedPodcast = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Podcast] else {return}
-        
-        
-        savedPodcast.forEach { (podcast) in
+        savedPodcasts.forEach { (podcast) in
             print(podcast.trackName)
         }
         

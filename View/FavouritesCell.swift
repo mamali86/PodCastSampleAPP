@@ -10,6 +10,21 @@ import UIKit
 
 class FavouritesCell: UICollectionViewCell {
     
+    
+    var savedPodcast: Podcast?{
+        
+        didSet{
+            
+            podcastNamelabel.text = savedPodcast?.trackName
+            authorNamelabel.text = savedPodcast?.artistName
+            guard let url = URL(string: savedPodcast?.artworkUrl600 ?? "") else {return}
+            favouriteImage.sd_setImage(with: url)
+            
+            
+        }
+    }
+    
+    
     let favouriteImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
