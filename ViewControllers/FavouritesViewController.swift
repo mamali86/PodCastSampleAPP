@@ -15,9 +15,30 @@ let cellID = "cellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         collectionView?.backgroundColor = .white
         collectionView?.register(FavouritesCell.self, forCellWithReuseIdentifier: cellID)
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture))
+        collectionView?.addGestureRecognizer(gesture)
+    }
+    
+
+    @objc func handleLongPressGesture(gesture: UILongPressGestureRecognizer){
+        print("HelloHandle")
+        let location = gesture.location(in: collectionView)
+        guard let selectedIndexPath = collectionView?.indexPathForItem(at: location) else {return}
+        
+        let alertController = UIAlertController(title: "Remove podcast?", message: "Remove podcast?", preferredStyle: .actionSheet)
+        
+        alertController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (_) in
+            
+            self.podcasts.remove(at: selectedIndexPath.item)
+            self.collectionView?.deleteItems(at: [selectedIndexPath])
+            
+            
+        }))
+        alertController.addAction(UIAlertAction(title: "no", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -35,8 +56,14 @@ let cellID = "cellID"
         return CGSize(width: width, height: width + 46)
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(16, 16, 16, 16)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
     }
     
 
