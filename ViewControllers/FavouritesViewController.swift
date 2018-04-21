@@ -21,6 +21,12 @@ let cellID = "cellID"
         collectionView?.addGestureRecognizer(gesture)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        podcasts = UserDefaults.toSaveFavouritePodcasts()
+        collectionView?.reloadData()
+        UIApplication.mainTabBarController()?.viewControllers?[1].tabBarItem.badgeValue = nil
+    }
 
     @objc func handleLongPressGesture(gesture: UILongPressGestureRecognizer){
         print("HelloHandle")
@@ -68,6 +74,14 @@ let cellID = "cellID"
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let podcast = self.podcasts[indexPath.item]
+        let podCastController = PodcastEpisodesController()
+        podCastController.podcast = podcast
+        navigationController?.pushViewController(podCastController, animated: true)
+        
     }
     
 

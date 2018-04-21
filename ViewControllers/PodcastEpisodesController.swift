@@ -41,7 +41,27 @@ class PodcastEpisodesController: UITableViewController {
     
     fileprivate func setupNavigationBarItems() {
         
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Favourites", style: .plain, target: self, action: #selector(handleSaveFavourite)), UIBarButtonItem(title: "Fetch", style: .plain, target: self, action: #selector(handleFetchSavedPodcasts))]
+        let savedPodcasts =  UserDefaults.toSaveFavouritePodcasts()
+        let hasFavourited = savedPodcasts.index(where: {$0.trackName == self.podcast?.trackName && $0.artistName == self.podcast?.artistName})
+            
+            if hasFavourited != nil {
+            
+             navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Heart"), style: .plain, target: self, action: nil)
+        }
+        
+        else {
+        
+        
+        
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Favourites", style: .plain, target: self, action: #selector(handleSaveFavourite)),
+//                                              UIBarButtonItem(title: "Fetch", style: .plain, target: self, action: #selector(handleFetchSavedPodcasts))
+                ]
+        }
+    }
+    
+    fileprivate func showBadgeHighlight() {
+        UIApplication.mainTabBarController()?.viewControllers?[1].tabBarItem.badgeValue = "New"
+        
     }
     
     @objc fileprivate func handleSaveFavourite() {
@@ -50,8 +70,11 @@ class PodcastEpisodesController: UITableViewController {
         var listOfPodcasts = UserDefaults.toSaveFavouritePodcasts()
         listOfPodcasts.append(podcast)
         
-         let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
+        let data = NSKeyedArchiver.archivedData(withRootObject: listOfPodcasts)
         UserDefaults.standard.set(data, forKey: UserDefaults.favouritedPodcastKey)
+        
+        showBadgeHighlight()
+       navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Heart"), style: .plain, target: self, action: nil)
         
             }
     
