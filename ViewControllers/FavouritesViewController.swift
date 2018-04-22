@@ -22,14 +22,13 @@ let cellID = "cellID"
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+     super.viewWillAppear(animated)
         podcasts = UserDefaults.toSaveFavouritePodcasts()
         collectionView?.reloadData()
         UIApplication.mainTabBarController()?.viewControllers?[1].tabBarItem.badgeValue = nil
     }
 
     @objc func handleLongPressGesture(gesture: UILongPressGestureRecognizer){
-        print("HelloHandle")
         let location = gesture.location(in: collectionView)
         guard let selectedIndexPath = collectionView?.indexPathForItem(at: location) else {return}
         

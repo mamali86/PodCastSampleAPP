@@ -30,7 +30,7 @@ class MainTabBarController: UITabBarController {
         let favouritesViewController = FavouritesViewController(collectionViewLayout: UICollectionViewFlowLayout())
         
         viewControllers = [generateNavigationController(for: PodCastsSearchController(), image: #imageLiteral(resourceName: "search"), title: "Search"),
-            generateNavigationController(for: favouritesViewController, image: #imageLiteral(resourceName: "favorites"), title: "Favourites"),  generateNavigationController(for: ViewController(), image: #imageLiteral(resourceName: "downloads"), title: "Downloads")]
+            generateNavigationController(for: favouritesViewController, image: #imageLiteral(resourceName: "favorites"), title: "Favourites"),  generateNavigationController(for: DownloadController(), image: #imageLiteral(resourceName: "downloads"), title: "Downloads")]
     }
     
     
