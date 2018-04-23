@@ -25,7 +25,9 @@ extension UserDefaults {
      func downloadEpisodes(episode: PodcastEpisode) {
         do {
             var episodesDownload = downloadedEpisodes ()
-            episodesDownload.append(episode)
+            //insert episode at the front of the list
+            episodesDownload.insert(episode, at: 0)
+//            episodesDownload.append(episode)
             let data = try JSONEncoder().encode(episodesDownload)
             UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpisodeKey)
 
