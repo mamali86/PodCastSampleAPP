@@ -65,4 +65,25 @@ extension UserDefaults {
         
     }
     
+    
+    
+    static func toDeletePodcastEpisode(podcastEpisode: PodcastEpisode) {
+        
+        let episodesDownload = UserDefaults.standard.downloadedEpisodes()
+        let filteredPodcastEpisodes = episodesDownload.filter { (pod) -> Bool in
+            return pod.title != podcastEpisode.title && pod.author != podcastEpisode.author
+        }
+        do {
+           
+            let data = try JSONEncoder().encode(filteredPodcastEpisodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpisodeKey)
+            
+
+        } catch let err {
+            print("error", err)
+        }
+        
+        
+    }
+    
 }
