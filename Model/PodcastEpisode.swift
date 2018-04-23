@@ -9,7 +9,7 @@
 import UIKit
 import FeedKit
 
-struct PodcastEpisode {
+struct PodcastEpisode: Codable{
     
     let title: String?
     let pubDate: Date?

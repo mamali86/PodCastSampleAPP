@@ -135,6 +135,16 @@ class PodcastEpisodesController: UITableViewController {
         return podcastEpisodes.isEmpty ? 200 : 0
     }
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let downloadAction = UITableViewRowAction(style: .normal, title: "Downloads") { (_, _) in
+            print("Downloading Episodes")
+            let epsiode = self.podcastEpisodes[indexPath.item]
+            UserDefaults.standard.downloadEpisodes(episode: epsiode)
+        }
+        
+        return [downloadAction]
+    }
     
     static func loadNib() -> PodcastDetailedEpisode {
         return  Bundle.main.loadNibNamed("PodcastDetailedEpisode", owner: self, options: nil)?.first as! PodcastDetailedEpisode
