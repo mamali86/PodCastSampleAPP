@@ -15,6 +15,30 @@ class ConfigApiManager: NSObject {
     
  static let sharedInstance = ConfigApiManager()
     
+    func downloadPodcastEpisodes(episode: PodcastEpisode) {
+        
+        
+        let downloadRequest = DownloadRequest.suggestedDownloadDestination()
+        
+        
+        Alamofire.download(episode.podCastUrl!, to: downloadRequest).downloadProgress { (progress) in
+            
+//            print(progress.fractionCompleted)
+            }.response { (resp) in
+                // Updating UserDefaults with the temp file
+                var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
+                guard let index = downloadedEpisodes.index(where: {$0.title == episode.title && $0.author == episode.author}) else {return}
+                downloadedEpisodes[index].filedUrl = resp.destinationURL?.absoluteString ?? ""
+                do {
+                    let data = try JSONEncoder().encode(downloadedEpisodes)
+                    UserDefaults.standard.set(data, forKey: UserDefaults.downloadEpisodeKey)
+                    
+                } catch let err {
+                    print("problem in enconding downloaded Episode with fileUrl update", err)
+                }
+        }
+    }
+    
     
     func fetchEpisoides(podcastFeedURL: String, completionHandler: @escaping ([PodcastEpisode]) -> ()) {
         
@@ -54,7 +78,7 @@ class ConfigApiManager: NSObject {
         let parameters = ["term": searchtext, "media": "podcast"]
 
     let url = "https://itunes.apple.com/search?term"
-
+        
 Alamofire.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
     
     if let err = dataResponse.error {

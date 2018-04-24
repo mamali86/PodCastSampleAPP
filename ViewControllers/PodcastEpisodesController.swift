@@ -140,6 +140,8 @@ class PodcastEpisodesController: UITableViewController {
         let downloadAction = UITableViewRowAction(style: .normal, title: "Downloads") { (_, _) in
             let epsiode = self.podcastEpisodes[indexPath.item]
             UserDefaults.standard.downloadEpisodes(episode: epsiode)
+            ConfigApiManager.sharedInstance.downloadPodcastEpisodes(episode: epsiode)
+            
         }
         
         return [downloadAction]
