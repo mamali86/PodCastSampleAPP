@@ -17,12 +17,8 @@ class ConfigApiManager: NSObject {
     
     func downloadPodcastEpisodes(episode: PodcastEpisode) {
         
-        
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
-        
-        
-        Alamofire.download(episode.podCastUrl!, to: downloadRequest).downloadProgress { (progress) in
-            
+        Alamofire.download(episode.podCastUrl, to: downloadRequest).downloadProgress { (progress) in
 //            print(progress.fractionCompleted)
             }.response { (resp) in
                 // Updating UserDefaults with the temp file

@@ -63,13 +63,36 @@ class PodcastDetailedEpisode: UIView  {
     
     
     fileprivate func fetchPlayer(){
-        guard let url = URL(string: podcastEpisode.podCastUrl ?? "") else {return}
+        
+        if podcastEpisode.filedUrl != nil {
+            
+            playEpisodeUsingFileUrl()
+            
+        }
+        else {
+        guard let url = URL(string: podcastEpisode.podCastUrl) else {return}
         let playerItem = AVPlayerItem(url: url)
         player.replaceCurrentItem(with: playerItem)
         player.play()
+        }
         
     }
 
+    fileprivate func playEpisodeUsingFileUrl() {
+        
+        print("Play using the fileUrl", podcastEpisode.filedUrl)
+        guard let fileURL = URL(string: podcastEpisode.filedUrl ?? "") else {return}
+        let fileName = fileURL.lastPathComponent
+        
+        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {return}
+        trueLocation.appendPathComponent(fileName)
+        //            print(trueLocation.absoluteString)
+        let playerItem = AVPlayerItem(url: trueLocation)
+        player.replaceCurrentItem(with: playerItem)
+        player.play()
+    }
+    
+    
     
     @IBAction func handleDismiss(_ sender: Any) {
 //        self.removeFromSuperview()

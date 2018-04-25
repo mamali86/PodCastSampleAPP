@@ -16,7 +16,7 @@ struct PodcastEpisode: Codable{
     let description: String?
     var imageUrl: String?
     var author: String?
-    var podCastUrl: String?
+    var podCastUrl: String
     var filedUrl: String?
     
     init(feedItem: RSSFeedItem) {
@@ -25,7 +25,7 @@ struct PodcastEpisode: Codable{
         self.description = feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? ""
         self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href 
         self.author = feedItem.iTunes?.iTunesAuthor ?? ""
-        self.podCastUrl = feedItem.enclosure?.attributes?.url
+        self.podCastUrl = feedItem.enclosure?.attributes?.url ?? ""
         
     }
 }

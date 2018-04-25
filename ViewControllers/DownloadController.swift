@@ -45,7 +45,25 @@ class DownloadController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episode = self.episodes[indexPath.item]
-        UIApplication.mainTabBarController()?.maximisePlayerDetails(podcastEpisode: episode, podcastPlayListEpisodes: self.episodes)
+        
+        if episode.filedUrl != nil {
+             UIApplication.mainTabBarController()?.maximisePlayerDetails(podcastEpisode: episode, podcastPlayListEpisodes: self.episodes)
+        }
+        
+        else{
+            
+            let alertController = UIAlertController(title: "FileUrl Not Found", message: "Can not file local file, play using podcastEpisode stream url instead", preferredStyle: .actionSheet)
+            
+            alertController.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (_) in
+                 UIApplication.mainTabBarController()?.maximisePlayerDetails(podcastEpisode: episode, podcastPlayListEpisodes: self.episodes)
+            }))
+            
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        
+       
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

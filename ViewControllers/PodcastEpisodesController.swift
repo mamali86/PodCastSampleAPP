@@ -51,8 +51,6 @@ class PodcastEpisodesController: UITableViewController {
         
         else {
         
-        
-        
         navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Favourites", style: .plain, target: self, action: #selector(handleSaveFavourite)),
 //                                              UIBarButtonItem(title: "Fetch", style: .plain, target: self, action: #selector(handleFetchSavedPodcasts))
                 ]
@@ -141,9 +139,7 @@ class PodcastEpisodesController: UITableViewController {
             let epsiode = self.podcastEpisodes[indexPath.item]
             UserDefaults.standard.downloadEpisodes(episode: epsiode)
             ConfigApiManager.sharedInstance.downloadPodcastEpisodes(episode: epsiode)
-            
         }
-        
         return [downloadAction]
     }
     
