@@ -50,8 +50,17 @@
                             </label>
                         </subviews>
                     </stackView>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="100%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kqP-ps-5UY">
+                        <rect key="frame" x="31" y="162" width="78" height="37"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                        <color key="shadowColor" red="0.093102331610000005" green="0.093102331610000005" blue="0.093102331610000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="kqP-ps-5UY" firstAttribute="centerY" secondItem="Wpq-0m-NA1" secondAttribute="centerY" id="17t-T9-5wn"/>
+                    <constraint firstItem="kqP-ps-5UY" firstAttribute="centerX" secondItem="Wpq-0m-NA1" secondAttribute="centerX" id="5F9-4C-e58"/>
                     <constraint firstAttribute="trailingMargin" secondItem="fgq-ku-R1s" secondAttribute="trailing" id="Rhf-fo-bP8"/>
                     <constraint firstItem="fgq-ku-R1s" firstAttribute="leading" secondItem="Wpq-0m-NA1" secondAttribute="trailing" constant="16" id="hBz-wJ-aYO"/>
                     <constraint firstItem="Wpq-0m-NA1" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="hCP-gp-dMC"/>
@@ -63,6 +72,7 @@
             <connections>
                 <outlet property="descriptionLabel" destination="krJ-fT-kLM" id="9Iq-cE-Ucw"/>
                 <outlet property="episodeImageView" destination="Wpq-0m-NA1" id="Wkt-k9-DJ6"/>
+                <outlet property="progressLabel" destination="kqP-ps-5UY" id="wpn-ns-TYN"/>
                 <outlet property="pubDateLabel" destination="IRn-4B-nIf" id="fnE-at-3hg"/>
                 <outlet property="titleLabel" destination="fRI-zV-sry" id="BOz-AH-2H4"/>
             </connections>

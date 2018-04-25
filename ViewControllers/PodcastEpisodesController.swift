@@ -77,7 +77,6 @@ class PodcastEpisodesController: UITableViewController {
             }
     
     @objc fileprivate func handleFetchSavedPodcasts() {
-    
          let savedPodcasts = UserDefaults.toSaveFavouritePodcasts()
         
         savedPodcasts.forEach { (podcast) in

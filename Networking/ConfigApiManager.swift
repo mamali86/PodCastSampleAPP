@@ -10,6 +10,11 @@ import Alamofire
 import UIKit
 import FeedKit
 
+extension Notification.Name {
+    
+    static let downloadProgress = NSNotification.Name("DownloadProgress")
+    
+}
 
 class ConfigApiManager: NSObject {
     
@@ -20,6 +25,11 @@ class ConfigApiManager: NSObject {
         let downloadRequest = DownloadRequest.suggestedDownloadDestination()
         Alamofire.download(episode.podCastUrl, to: downloadRequest).downloadProgress { (progress) in
 //            print(progress.fractionCompleted)
+            
+            
+            NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title" : episode.title, "progress": progress.fractionCompleted])
+            
+            
             }.response { (resp) in
                 // Updating UserDefaults with the temp file
                 var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
