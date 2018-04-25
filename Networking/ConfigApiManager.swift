@@ -13,12 +13,17 @@ import FeedKit
 extension Notification.Name {
     
     static let downloadProgress = NSNotification.Name("DownloadProgress")
+    static let downloadComplete = NSNotification.Name("DownloadComplete")
+
     
 }
 
 class ConfigApiManager: NSObject {
     
  static let sharedInstance = ConfigApiManager()
+    
+    typealias EpisodeDownloadCompleteTuple = (fileUrl: String, episodeTitle: String)
+    
     
     func downloadPodcastEpisodes(episode: PodcastEpisode) {
         
@@ -30,9 +35,14 @@ class ConfigApiManager: NSObject {
             NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title" : episode.title, "progress": progress.fractionCompleted])
             
             
+        
             }.response { (resp) in
                 // Updating UserDefaults with the temp file
                 var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
+                
+                let episodeDownloadCompleteTuple = EpisodeDownloadCompleteTuple(resp.destinationURL?.absoluteString ?? "", episode.title ?? "")
+                NotificationCenter.default.post(name: .downloadComplete, object: episodeDownloadCompleteTuple, userInfo: nil)
+                
                 guard let index = downloadedEpisodes.index(where: {$0.title == episode.title && $0.author == episode.author}) else {return}
                 downloadedEpisodes[index].filedUrl = resp.destinationURL?.absoluteString ?? ""
                 do {

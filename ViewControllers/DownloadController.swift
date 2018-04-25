@@ -29,6 +29,18 @@ class DownloadController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadProgress), name: .downloadProgress, object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDownloadComplete), name: .downloadComplete, object: nil)
+        
+    }
+    
+    @objc fileprivate func handleDownloadComplete(notification: Notification) {
+        
+        guard let epsiodeDownloadComplete = notification.object as? ConfigApiManager.EpisodeDownloadCompleteTuple else {return}
+        
+        guard let index = self.episodes.index(where: {$0.title == epsiodeDownloadComplete.episodeTitle }) else {return}
+        
+        self.episodes[index].filedUrl = epsiodeDownloadComplete.fileUrl
+
     }
     
     @objc fileprivate func handleDownloadProgress(notification: Notification){
@@ -47,7 +59,6 @@ class DownloadController: UITableViewController {
         cell.progressLabel.text = "\(Int(progress * 100))%"
         
         if progress == 1 {
-            
             cell.progressLabel.isHidden = true
         }
         
