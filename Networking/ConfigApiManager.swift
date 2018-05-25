@@ -31,11 +31,7 @@ class ConfigApiManager: NSObject {
         Alamofire.download(episode.podCastUrl, to: downloadRequest).downloadProgress { (progress) in
 //            print(progress.fractionCompleted)
             
-            
             NotificationCenter.default.post(name: .downloadProgress, object: nil, userInfo: ["title" : episode.title, "progress": progress.fractionCompleted])
-            
-            
-        
             }.response { (resp) in
                 // Updating UserDefaults with the temp file
                 var downloadedEpisodes = UserDefaults.standard.downloadedEpisodes()
@@ -54,7 +50,6 @@ class ConfigApiManager: NSObject {
                 }
         }
     }
-    
     
     func fetchEpisoides(podcastFeedURL: String, completionHandler: @escaping ([PodcastEpisode]) -> ()) {
         
